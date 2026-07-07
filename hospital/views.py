@@ -83,19 +83,58 @@ def appointment_success(request, appointment_id):
     appointment = get_object_or_404(Appointment, id=appointment_id)
     return render(request, 'hospital/appointment_success.html', {'appointment': appointment})
 
+def patient_login(request):
+    phone = request.GET.get('phone', '').strip() if request.method == 'GET' else ''
+
+    if request.method == 'POST':
+        phone = request.POST.get('phone', '').strip()
+        if not phone:
+            messages.error(request, "Please enter your registered phone number to continue.")
+        else:
+            try:
+                patient = Patient.objects.get(phone=phone)
+                request.session['patient_phone'] = patient.phone
+                request.session['patient_name'] = patient.name
+                messages.success(request, f"Welcome back, {patient.name}! You are now logged in.")
+                return redirect('patient_dashboard')
+            except Patient.DoesNotExist:
+                messages.error(request, "Phone number not found. Please book an appointment first.")
+
+    return render(request, 'hospital/patient_login.html', {'phone': phone})
+
+
+def patient_logout(request):
+    request.session.pop('patient_phone', None)
+    request.session.pop('patient_name', None)
+    messages.success(request, "You have been logged out from the patient portal.")
+    return redirect('patient_login')
+
+
 def patient_dashboard(request):
-    phone = request.GET.get('phone', '').strip()
-    appointments = []
-    searched = False
-    
-    if phone:
-        appointments = Appointment.objects.filter(patient_phone=phone).order_by('-appointment_date', '-created_at')
-        searched = True
-        
+    session_phone = request.session.get('patient_phone', '').strip()
+    phone = request.GET.get('phone', '').strip() or session_phone
+
+    if not phone:
+        return redirect('patient_login')
+
+    if phone != session_phone:
+        try:
+            patient = Patient.objects.get(phone=phone)
+            request.session['patient_phone'] = patient.phone
+            request.session['patient_name'] = patient.name
+        except Patient.DoesNotExist:
+            request.session.pop('patient_phone', None)
+            request.session.pop('patient_name', None)
+            messages.error(request, "Phone number not found. Please login with a registered patient phone.")
+            return redirect('patient_login')
+
+    appointments = Appointment.objects.filter(patient_phone=phone).order_by('-appointment_date', '-created_at')
+    searched = bool(appointments)
+
     # Group appointments into active and history
     upcoming = []
     past = []
-    
+
     for app in appointments:
         if app.appointment_date >= timezone.localdate() and app.status in ['PENDING', 'CONFIRMED']:
             upcoming.append(app)
@@ -107,6 +146,7 @@ def patient_dashboard(request):
         'past': past,
         'phone': phone,
         'searched': searched,
+        'patient_name': request.session.get('patient_name', ''),
     }
     return render(request, 'hospital/patient_dashboard.html', context)
 

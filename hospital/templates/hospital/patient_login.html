@@ -1,0 +1,45 @@
+{% extends 'hospital/base.html' %}
+
+{% block title %}Patient Login - HealthHub Hospital{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="glass-card bg-white p-4 p-md-5 mt-4 fade-in">
+            <div class="text-center mb-4">
+                <div class="rounded-circle bg-success-light p-3 mx-auto text-success mb-3 shadow-sm" style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center;">
+                    <i class="bi bi-person-circle fs-2"></i>
+                </div>
+                <h3 class="fw-bold text-dark">Patient Login</h3>
+                <p class="text-muted small">Enter your registered phone number to view your appointments and reports.</p>
+            </div>
+
+            <form method="POST" action="{% url 'patient_login' %}">
+                {% csrf_token %}
+
+                <div class="mb-4">
+                    <label for="id_phone" class="form-label fw-semibold">Phone Number</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light text-muted border-end-0">
+                            <i class="bi bi-phone-fill"></i>
+                        </span>
+                        <input type="text" name="phone" id="id_phone" class="form-control border-start-0 bg-light" placeholder="Enter registered phone" value="{{ phone }}" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-premium w-100 rounded-pill py-2.5">
+                    <i class="bi bi-box-arrow-in-right me-1"></i> Continue
+                </button>
+            </form>
+
+            <hr class="text-muted my-4">
+            <div class="text-center">
+                <p class="mb-1">New patient?</p>
+                <a href="{% url 'doctor_list' %}" class="btn btn-outline-primary btn-sm rounded-pill px-4">
+                    <i class="bi bi-calendar-plus me-1"></i> Book Appointment
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

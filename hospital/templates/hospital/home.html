@@ -1,6 +1,6 @@
 {% extends 'hospital/base.html' %}
 
-{% block title %}CarePort - Hospital Appointment Management Portal{% endblock %}
+{% block title %}HealthHub - Hospital Appointment Management Portal{% endblock %}
 
 {% block content %}
 <div class="row">
@@ -13,7 +13,7 @@
                 <a href="{% url 'doctor_list' %}" class="btn btn-premium btn-lg rounded-pill">
                     <i class="bi bi-calendar-plus me-2"></i> Book Appointment Now
                 </a>
-                <a href="{% url 'patient_dashboard' %}" class="btn btn-outline-light btn-lg rounded-pill">
+                <a href="{% url 'patient_login' %}" class="btn btn-outline-light btn-lg rounded-pill">
                     <i class="bi bi-clipboard2-pulse me-2"></i> Patient Portal
                 </a>
             </div>
