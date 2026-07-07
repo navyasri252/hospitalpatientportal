@@ -82,6 +82,33 @@ python manage.py runserver 127.0.0.1:8000
 
 Visit `http://127.0.0.1:8000/` in your browser.
 
+## Screenshots
+
+### Home Page
+Landing page with quick access to book appointments and patient portal.
+
+![home.png](./screenshots/home.png)
+
+### Doctor List
+Browse all doctors with department filtering, consultation fees, and availability.
+
+![doctor-list.png](./screenshots/doctor-list.png)
+
+### Book Appointment
+Schedule consultation with interactive time slot selection and booking form.
+
+![book-appointment.png](./screenshots/book-appointment.png)
+
+### Patient Login
+Phone-based authentication for patients to access their appointment history.
+
+![patient-login.png](./screenshots/patient-login.png)
+
+### Admin Login
+Staff authentication portal for managing appointments and medical reports.
+
+![admin-login.png](./screenshots/admin-login.png)
+
 ### Admin Panel Access
 - URL: `http://127.0.0.1:8000/admin-panel/login/`
 - Default credentials: `admin` / `admin123`
