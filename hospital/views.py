@@ -39,24 +39,12 @@ def doctor_list(request):
 
 def book_appointment(request, doctor_id):
     doctor = get_object_or_404(Doctor, id=doctor_id, is_active=True)
-    patient_phone = request.session.get('patient_phone', '').strip()
-
-    if not patient_phone:
-        messages.info(request, 'Please sign in as a patient before booking an appointment.')
-        return redirect('patient_login')
-
-    patient = Patient.objects.filter(phone=patient_phone).first()
-    if not patient:
-        messages.error(request, 'Your patient session is invalid. Please sign in again.')
-        return redirect('patient_login')
-
+    
     if request.method == 'POST':
         form = AppointmentForm(request.POST)
         if form.is_valid():
             appointment = form.save(commit=False)
             appointment.doctor = doctor
-            appointment.patient_name = patient.name
-            appointment.patient_phone = patient.phone
             
             # Double-booking check
             date = form.cleaned_data['appointment_date']
@@ -68,11 +56,17 @@ def book_appointment(request, doctor_id):
                 try:
                     appointment.save()
                     
-                    # Also create or check Patient profile by phone
-                    Patient.objects.get_or_create(
-                        phone=patient.phone,
-                        defaults={'name': patient.name}
+                    # Create or get Patient profile by phone
+                    patient_phone = form.cleaned_data['patient_phone']
+                    patient_name = form.cleaned_data['patient_name']
+                    patient, created = Patient.objects.get_or_create(
+                        phone=patient_phone,
+                        defaults={'name': patient_name}
                     )
+                    
+                    # Auto-login the patient after booking
+                    request.session['patient_phone'] = patient.phone
+                    request.session['patient_name'] = patient.name
                     
                     messages.success(request, f"Appointment with Dr. {doctor.name} booked successfully!")
                     return redirect('appointment_success', appointment_id=appointment.id)
@@ -81,16 +75,18 @@ def book_appointment(request, doctor_id):
     else:
         # Default value for form
         initial_date = request.GET.get('date', timezone.localdate().isoformat())
+        # Pre-fill patient details if already logged in
+        patient_phone = request.session.get('patient_phone', '')
+        patient_name = request.session.get('patient_name', '')
         form = AppointmentForm(initial={
             'appointment_date': initial_date,
-            'patient_name': patient.name,
-            'patient_phone': patient.phone,
+            'patient_name': patient_name,
+            'patient_phone': patient_phone,
         })
         
     context = {
         'doctor': doctor,
         'form': form,
-        'patient_name': patient.name,
     }
     return render(request, 'hospital/book_appointment.html', context)
 
