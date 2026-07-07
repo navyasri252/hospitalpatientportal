@@ -1,0 +1,112 @@
+{% extends 'hospital/base.html' %}
+
+{% block title %}CarePort - Hospital Appointment Management Portal{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Hero Section -->
+    <div class="col-12 mb-5">
+        <div class="hero-gradient p-5 shadow-lg d-flex flex-column align-items-start justify-content-center min-vh-40 fade-in">
+            <h1 class="display-4 fw-bold mb-3">Healthcare Made Simple & Accessible</h1>
+            <p class="lead mb-4 col-lg-8">Book appointments with top-rated medical specialists instantly. Check availability, manage schedules, and track consultation statuses in one unified portal.</p>
+            <div class="d-flex flex-wrap gap-3">
+                <a href="{% url 'doctor_list' %}" class="btn btn-premium btn-lg rounded-pill">
+                    <i class="bi bi-calendar-plus me-2"></i> Book Appointment Now
+                </a>
+                <a href="{% url 'patient_dashboard' %}" class="btn btn-outline-light btn-lg rounded-pill">
+                    <i class="bi bi-clipboard2-pulse me-2"></i> Patient Portal
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Stats Counter Section -->
+<div class="row g-4 mb-5 fade-in delay-1">
+    <div class="col-md-4">
+        <div class="glass-card stat-box bg-white p-4 d-flex align-items-center">
+            <div class="rounded-circle bg-primary-light p-3 me-3 text-primary">
+                <i class="bi bi-people-fill fs-3"></i>
+            </div>
+            <div>
+                <h3 class="fw-bold mb-0 text-dark">{{ doctors_count }}</h3>
+                <p class="text-muted mb-0 small uppercase fw-bold tracking-wider">Active Medical Doctors</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="glass-card stat-box bg-white p-4 d-flex align-items-center">
+            <div class="rounded-circle bg-success-light p-3 me-3 text-success">
+                <i class="bi bi-calendar-check-fill fs-3"></i>
+            </div>
+            <div>
+                <h3 class="fw-bold mb-0 text-dark">{{ appointments_count }}</h3>
+                <p class="text-muted mb-0 small uppercase fw-bold tracking-wider">Total Appointments Booked</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="glass-card stat-box bg-white p-4 d-flex align-items-center">
+            <div class="rounded-circle bg-warning-light p-3 me-3 text-warning">
+                <i class="bi bi-hourglass-split fs-3"></i>
+            </div>
+            <div>
+                <h3 class="fw-bold mb-0 text-dark">{{ pending_count }}</h3>
+                <p class="text-muted mb-0 small uppercase fw-bold tracking-wider">Pending Confirmations</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Departments Section -->
+<div class="row mb-5 fade-in delay-2">
+    <div class="col-12 text-center mb-4">
+        <h2 class="fw-bold text-dark">Explore Specialties & Departments</h2>
+        <p class="text-muted">Select a department to find the perfect specialist for your consultation.</p>
+    </div>
+    
+    <div class="col-md-3 col-sm-6 mb-4">
+        <div class="glass-card bg-white p-4 text-center h-100">
+            <div class="rounded-circle bg-danger-light p-3 mx-auto text-danger mb-3" style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center;">
+                <i class="bi bi-heart-fill fs-3"></i>
+            </div>
+            <h5 class="fw-bold">Cardiology</h5>
+            <p class="text-muted small">Heart health, cardiovascular diseases, and vascular therapies.</p>
+            <a href="{% url 'doctor_list' %}?dept=CARDIO" class="btn btn-sm btn-outline-primary rounded-pill mt-2">View Doctors</a>
+        </div>
+    </div>
+    
+    <div class="col-md-3 col-sm-6 mb-4">
+        <div class="glass-card bg-white p-4 text-center h-100">
+            <div class="rounded-circle bg-primary-light p-3 mx-auto text-primary mb-3" style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center;">
+                <i class="bi bi-emoji-smile-fill fs-3"></i>
+            </div>
+            <h5 class="fw-bold">Pediatrics</h5>
+            <p class="text-muted small">Comprehensive care for infants, children, and adolescents.</p>
+            <a href="{% url 'doctor_list' %}?dept=PEDIA" class="btn btn-sm btn-outline-primary rounded-pill mt-2">View Doctors</a>
+        </div>
+    </div>
+    
+    <div class="col-md-3 col-sm-6 mb-4">
+        <div class="glass-card bg-white p-4 text-center h-100">
+            <div class="rounded-circle bg-success-light p-3 mx-auto text-success mb-3" style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center;">
+                <i class="bi bi-activity fs-3"></i>
+            </div>
+            <h5 class="fw-bold">Orthopedics</h5>
+            <p class="text-muted small">Bones, joints, ligaments, tendons, and muscles diagnostics.</p>
+            <a href="{% url 'doctor_list' %}?dept=ORTHO" class="btn btn-sm btn-outline-primary rounded-pill mt-2">View Doctors</a>
+        </div>
+    </div>
+    
+    <div class="col-md-3 col-sm-6 mb-4">
+        <div class="glass-card bg-white p-4 text-center h-100">
+            <div class="rounded-circle bg-info-light p-3 mx-auto text-info mb-3" style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center; background-color: #e0f7fa;">
+                <i class="bi bi-brain-fill fs-3" style="color: #0097a7;"></i>
+            </div>
+            <h5 class="fw-bold">Neurology</h5>
+            <p class="text-muted small">Brain, spinal cord, nervous system, and sensory treatments.</p>
+            <a href="{% url 'doctor_list' %}?dept=NEURO" class="btn btn-sm btn-outline-primary rounded-pill mt-2">View Doctors</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,103 @@
+{% extends 'hospital/base.html' %}
+{% load static %}
+
+{% block title %}Book Appointment with Dr. {{ doctor.name }} - CarePort Hospital{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10">
+        <!-- Back link -->
+        <a href="{% url 'doctor_list' %}" class="btn btn-link text-decoration-none mb-3 p-0">
+            <i class="bi bi-arrow-left me-1"></i> Back to Doctors List
+        </a>
+        
+        <div class="glass-card bg-white p-4 p-md-5">
+            <h2 class="fw-bold text-dark mb-4 text-center">Schedule Consultation</h2>
+            
+            <!-- Doctor Details Card -->
+            <div class="p-3 mb-4 rounded-4 bg-primary-light d-flex align-items-center">
+                <div class="rounded-circle bg-white p-2 text-primary me-3 shadow-sm" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
+                    <i class="bi bi-person-check-fill fs-3"></i>
+                </div>
+                <div>
+                    <h5 class="fw-bold mb-0">Dr. {{ doctor.name }}</h5>
+                    <span class="small text-muted">{{ doctor.specialization }} | {{ doctor.get_department_display }}</span>
+                    <span class="d-block small text-dark fw-bold mt-1">Consultation Fee: ${{ doctor.consultation_fee }}</span>
+                </div>
+            </div>
+            
+            <!-- Booking Form -->
+            <form id="booking-form" method="POST" action="{% url 'book_appointment' doctor.id %}">
+                {% csrf_token %}
+                
+                <!-- Patient Name -->
+                <div class="mb-3">
+                    <label for="id_patient_name" class="form-label fw-semibold">Patient Name <span class="text-danger">*</span></label>
+                    {{ form.patient_name }}
+                    {% if form.patient_name.errors %}
+                        <div class="text-danger small mt-1">{{ form.patient_name.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                
+                <!-- Patient Phone -->
+                <div class="mb-3">
+                    <label for="id_patient_phone" class="form-label fw-semibold">Contact Phone Number <span class="text-danger">*</span></label>
+                    {{ form.patient_phone }}
+                    {% if form.patient_phone.errors %}
+                        <div class="text-danger small mt-1">{{ form.patient_phone.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="row">
+                    <!-- Appointment Date -->
+                    <div class="col-md-6 mb-3">
+                        <label for="id_appointment_date" class="form-label fw-semibold">Consultation Date <span class="text-danger">*</span></label>
+                        {{ form.appointment_date }}
+                        {% if form.appointment_date.errors %}
+                            <div class="text-danger small mt-1">{{ form.appointment_date.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Hidden original select field for form binding -->
+                    <div style="display: none;">
+                        {{ form.time_slot }}
+                    </div>
+                </div>
+                
+                <!-- Interactive Slot Selector UI -->
+                <div class="mb-4">
+                    <label class="form-label fw-semibold d-block">Select Time Slot <span class="text-danger">*</span></label>
+                    <small class="text-muted d-block mb-3">Green slots are available, red slots are already booked.</small>
+                    
+                    <div class="slot-container" id="slot-picker-grid">
+                        <!-- Filled by JS -->
+                    </div>
+                    
+                    {% if form.time_slot.errors %}
+                        <div class="text-danger small mt-2">{{ form.time_slot.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                
+                <!-- Reason/Symptoms -->
+                <div class="mb-4">
+                    <label for="id_reason" class="form-label fw-semibold">Reason for Visit <span class="text-muted">(Optional)</span></label>
+                    {{ form.reason }}
+                </div>
+                
+                <!-- Submit -->
+                <button type="submit" class="btn btn-premium w-100 rounded-pill py-3 mt-2" id="submit-booking-btn" disabled>
+                    <i class="bi bi-calendar-check me-2"></i> Confirm Booking
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Pass django context values safely to script -->
+<script>
+    const doctorId = "{{ doctor.id }}";
+</script>
+<script src="{% static 'js/slot_selector.js' %}"></script>
+{% endblock %}

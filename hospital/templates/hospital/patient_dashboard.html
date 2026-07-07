@@ -1,0 +1,199 @@
+{% extends 'hospital/base.html' %}
+
+{% block title %}Patient Portal - CarePort Hospital{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <!-- Dashboard Header -->
+        <div class="glass-card bg-white p-4 p-md-5 mb-5 fade-in">
+            <h2 class="fw-bold text-dark text-center mb-4">Patient Portal</h2>
+            <p class="text-muted text-center mb-4">Enter your registered phone number below to access your appointment schedules and view medical reports.</p>
+            
+            <!-- Search Form -->
+            <form method="GET" action="{% url 'patient_dashboard' %}" class="row justify-content-center g-3">
+                <div class="col-md-6 col-sm-8">
+                    <div class="input-group input-group-lg shadow-sm rounded-pill overflow-hidden border">
+                        <span class="input-group-text bg-white border-0 ps-3 text-muted">
+                            <i class="bi bi-phone-fill"></i>
+                        </span>
+                        <input type="text" name="phone" value="{{ phone }}" class="form-control border-0 ps-1 py-3" placeholder="Enter Phone Number..." required>
+                        <button type="submit" class="btn btn-premium px-4">
+                            <i class="bi bi-search me-1"></i> Search
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        {% if searched %}
+            <!-- Upcoming Appointments -->
+            <div class="mb-5 fade-in delay-1">
+                <h4 class="fw-bold text-dark mb-3"><i class="bi bi-calendar-check me-2 text-primary"></i>Upcoming Consultations</h4>
+                <div class="glass-card bg-white p-4">
+                    {% if upcoming %}
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="text-muted small">Doctor</th>
+                                        <th scope="col" class="text-muted small">Department</th>
+                                        <th scope="col" class="text-muted small">Schedule Date</th>
+                                        <th scope="col" class="text-muted small">Time Slot</th>
+                                        <th scope="col" class="text-muted small">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for app in upcoming %}
+                                        <tr>
+                                            <td>
+                                                <div class="fw-bold text-dark">Dr. {{ app.doctor.name }}</div>
+                                                <small class="text-muted">{{ app.doctor.specialization }}</small>
+                                            </td>
+                                            <td>
+                                                <span class="badge badge-custom {% if app.doctor.department == 'CARDIO' %}badge-cancelled{% elif app.doctor.department == 'PEDIA' %}badge-completed{% elif app.doctor.department == 'ORTHO' %}badge-confirmed{% else %}badge-pending{% endif %}">
+                                                    {{ app.doctor.get_department_display }}
+                                                </span>
+                                            </td>
+                                            <td class="fw-semibold">{{ app.appointment_date }}</td>
+                                            <td class="text-muted">{{ app.time_slot }}</td>
+                                            <td>
+                                                {% if app.status == 'PENDING' %}
+                                                    <span class="badge badge-custom badge-pending">{{ app.get_status_display }}</span>
+                                                {% elif app.status == 'CONFIRMED' %}
+                                                    <span class="badge badge-custom badge-confirmed">{{ app.get_status_display }}</span>
+                                                {% elif app.status == 'COMPLETED' %}
+                                                    <span class="badge badge-custom badge-completed">{{ app.get_status_display }}</span>
+                                                {% else %}
+                                                    <span class="badge badge-custom badge-cancelled">{{ app.get_status_display }}</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="bi bi-calendar-x text-muted display-6"></i>
+                            <p class="text-muted mt-2 mb-0">No upcoming consultations found for this phone number.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Past Consultations & Reports -->
+            <div class="fade-in delay-2">
+                <h4 class="fw-bold text-dark mb-3"><i class="bi bi-clock-history me-2 text-secondary"></i>Past Consultations & Reports</h4>
+                <div class="glass-card bg-white p-4">
+                    {% if past %}
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="text-muted small">Doctor</th>
+                                        <th scope="col" class="text-muted small">Department</th>
+                                        <th scope="col" class="text-muted small">Schedule Date</th>
+                                        <th scope="col" class="text-muted small">Time Slot</th>
+                                        <th scope="col" class="text-muted small">Status</th>
+                                        <th scope="col" class="text-muted small text-center">Medical Report</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for app in past %}
+                                        <tr>
+                                            <td>
+                                                <div class="fw-bold text-dark">Dr. {{ app.doctor.name }}</div>
+                                                <small class="text-muted">{{ app.doctor.specialization }}</small>
+                                            </td>
+                                            <td>
+                                                <span class="badge badge-custom {% if app.doctor.department == 'CARDIO' %}badge-cancelled{% elif app.doctor.department == 'PEDIA' %}badge-completed{% elif app.doctor.department == 'ORTHO' %}badge-confirmed{% else %}badge-pending{% endif %}">
+                                                    {{ app.doctor.get_department_display }}
+                                                </span>
+                                            </td>
+                                            <td class="fw-semibold">{{ app.appointment_date }}</td>
+                                            <td class="text-muted">{{ app.time_slot }}</td>
+                                            <td>
+                                                {% if app.status == 'PENDING' %}
+                                                    <span class="badge badge-custom badge-pending">{{ app.get_status_display }}</span>
+                                                {% elif app.status == 'CONFIRMED' %}
+                                                    <span class="badge badge-custom badge-confirmed">{{ app.get_status_display }}</span>
+                                                {% elif app.status == 'COMPLETED' %}
+                                                    <span class="badge badge-custom badge-completed">{{ app.get_status_display }}</span>
+                                                {% else %}
+                                                    <span class="badge badge-custom badge-cancelled">{{ app.get_status_display }}</span>
+                                                {% endif %}
+                                            </td>
+                                            <td class="text-center">
+                                                {% if app.medical_report %}
+                                                    <!-- Trigger Modal Button -->
+                                                    <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#reportModal{{ app.id }}">
+                                                        <i class="bi bi-file-earmark-medical me-1"></i> View Report
+                                                    </button>
+                                                    
+                                                    <!-- Modal Structure -->
+                                                    <div class="modal fade" id="reportModal{{ app.id }}" tabindex="-1" aria-labelledby="reportModalLabel{{ app.id }}" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content border-0 shadow-lg rounded-4">
+                                                                <div class="modal-header bg-primary-light border-0 py-3">
+                                                                    <h5 class="modal-title fw-bold text-primary" id="reportModalLabel{{ app.id }}">
+                                                                        <i class="bi bi-prescription2 me-2"></i>Medical Consultation Report
+                                                                    </h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body p-4 text-start">
+                                                                    <div class="d-flex justify-content-between mb-3 border-bottom pb-2">
+                                                                        <div>
+                                                                            <small class="text-muted d-block">Consulting Doctor</small>
+                                                                            <strong class="text-dark">Dr. {{ app.doctor.name }}</strong>
+                                                                        </div>
+                                                                        <div class="text-end">
+                                                                            <small class="text-muted d-block">Date of Service</small>
+                                                                            <strong class="text-dark">{{ app.appointment_date }}</strong>
+                                                                        </div>
+                                                                    </div>
+                                                                    
+                                                                    <div class="mb-3">
+                                                                        <label class="fw-bold text-muted small uppercase">Diagnosis / Findings</label>
+                                                                        <p class="p-3 bg-light rounded-3 text-dark mb-0 fs-6">{{ app.medical_report.diagnosis }}</p>
+                                                                    </div>
+                                                                    
+                                                                    <div class="mb-3">
+                                                                        <label class="fw-bold text-muted small uppercase">Prescribed Medicine / Treatment</label>
+                                                                        <p class="p-3 bg-light rounded-3 text-dark mb-0 fs-6" style="white-space: pre-line;">{{ app.medical_report.prescription }}</p>
+                                                                    </div>
+                                                                    
+                                                                    {% if app.medical_report.notes %}
+                                                                        <div>
+                                                                            <label class="fw-bold text-muted small uppercase">Doctor Notes</label>
+                                                                            <p class="p-3 bg-light rounded-3 text-dark mb-0 small">{{ app.medical_report.notes }}</p>
+                                                                        </div>
+                                                                    {% endif %}
+                                                                </div>
+                                                                <div class="modal-footer border-0">
+                                                                    <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-target="#reportModal{{ app.id }}" data-bs-dismiss="modal">Close</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% else %}
+                                                    <span class="text-muted small">No report available</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="bi bi-clock text-muted display-6"></i>
+                            <p class="text-muted mt-2 mb-0">No past consultations found for this phone number.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

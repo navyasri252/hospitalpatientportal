@@ -1,0 +1,54 @@
+{% extends 'hospital/base.html' %}
+
+{% block title %}Appointment Booked Successfully - CarePort Hospital{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="glass-card bg-white p-5 text-center fade-in">
+            <div class="rounded-circle bg-success-light p-4 mx-auto text-success mb-4 shadow-sm" style="width: 90px; height: 90px; display: flex; align-items: center; justify-content: center;">
+                <i class="bi bi-calendar-check-fill display-4"></i>
+            </div>
+            
+            <h2 class="fw-bold text-dark mb-2">Appointment Booked!</h2>
+            <p class="text-muted">Your booking has been received and is pending confirmation from our clinic staff.</p>
+            
+            <div class="card border-0 bg-light p-4 text-start rounded-4 my-4 shadow-sm">
+                <h5 class="fw-bold mb-3 border-bottom pb-2 text-primary">Booking Summary</h5>
+                <div class="row g-2">
+                    <div class="col-5 text-muted small">Patient Name:</div>
+                    <div class="col-7 fw-semibold text-dark">{{ appointment.patient_name }}</div>
+                    
+                    <div class="col-5 text-muted small">Doctor:</div>
+                    <div class="col-7 fw-semibold text-dark">Dr. {{ appointment.doctor.name }}</div>
+                    
+                    <div class="col-5 text-muted small">Department:</div>
+                    <div class="col-7 fw-semibold text-dark">{{ appointment.doctor.get_department_display }}</div>
+                    
+                    <div class="col-5 text-muted small">Date:</div>
+                    <div class="col-7 fw-semibold text-dark">{{ appointment.appointment_date }}</div>
+                    
+                    <div class="col-5 text-muted small">Time Slot:</div>
+                    <div class="col-7 fw-semibold text-dark">{{ appointment.time_slot }}</div>
+                    
+                    <div class="col-5 text-muted small">Booking Status:</div>
+                    <div class="col-7">
+                        <span class="badge badge-custom badge-pending">
+                            {{ appointment.get_status_display }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="d-flex flex-column gap-2">
+                <a href="{% url 'patient_dashboard' %}?phone={{ appointment.patient_phone }}" class="btn btn-premium rounded-pill py-2">
+                    <i class="bi bi-speedometer2 me-2"></i> Go to Patient Portal
+                </a>
+                <a href="{% url 'home' %}" class="btn btn-outline-secondary rounded-pill py-2 border-0">
+                    Go Back Home
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

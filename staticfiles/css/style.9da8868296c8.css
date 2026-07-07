@@ -1,0 +1,232 @@
+/* Hospital & Patient Appointment Management Portal Custom Styles */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --primary: #0d6efd;
+    --primary-light: #e6f0fa;
+    --secondary: #6c757d;
+    --success: #198754;
+    --success-light: #d1e7dd;
+    --danger: #dc3545;
+    --danger-light: #f8d7da;
+    --warning: #ffc107;
+    --warning-light: #fff3cd;
+    --info: #0dcaf0;
+    --dark: #212529;
+    --light: #f8f9fa;
+    --white: #ffffff;
+    
+    /* Medical palette accents */
+    --teal: #0f766e;
+    --teal-light: #ccfbf1;
+    --purple: #6d28d9;
+    --purple-light: #ede9fe;
+    
+    /* Glassmorphism settings */
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.4);
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08);
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+    min-height: 100vh;
+    color: #334155;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+/* Navbar */
+.navbar-custom {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--glass-border);
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.04);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    background: linear-gradient(to right, #0284c7, #4f46e5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Glassmorphism Cards */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    box-shadow: var(--glass-shadow);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.12);
+}
+
+/* Gradient Hero */
+.hero-gradient {
+    background: radial-gradient(circle at 10% 20%, rgb(4, 159, 108) 0%, rgb(194, 254, 113) 90.1%);
+    background: linear-gradient(135deg, #0f766e 0%, #0284c7 50%, #4f46e5 100%);
+    border-radius: 24px;
+    color: var(--white);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-gradient::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+    pointer-events: none;
+}
+
+/* Custom Buttons */
+.btn-premium {
+    background: linear-gradient(to right, #0284c7, #4f46e5);
+    border: none;
+    color: var(--white);
+    font-weight: 600;
+    padding: 10px 24px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-premium:hover {
+    background: linear-gradient(to right, #0369a1, #4338ca);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(2, 132, 199, 0.4);
+    color: var(--white);
+}
+
+/* Badges styling */
+.badge-custom {
+    padding: 6px 12px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-pending {
+    background-color: var(--warning-light);
+    color: #856404;
+    border: 1px solid #ffeeba;
+}
+
+.badge-confirmed {
+    background-color: var(--success-light);
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.badge-completed {
+    background-color: var(--primary-light);
+    color: #004085;
+    border: 1px solid #b8daff;
+}
+
+.badge-cancelled {
+    background-color: var(--danger-light);
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Custom Time Slots Grid */
+.slot-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.slot-btn {
+    border: 2px solid #e2e8f0;
+    background-color: var(--white);
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.slot-btn:hover:not(.booked) {
+    border-color: var(--primary);
+    background-color: var(--primary-light);
+    transform: scale(1.02);
+}
+
+.slot-btn.selected {
+    border-color: var(--primary);
+    background-color: var(--primary);
+    color: var(--white);
+}
+
+.slot-btn.booked {
+    background-color: var(--danger-light);
+    color: #721c24;
+    border-color: #f5c6cb;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Doctor Filters */
+.filter-btn {
+    border: 1px solid #cbd5e1;
+    background-color: var(--white);
+    color: #64748b;
+    border-radius: 30px;
+    padding: 8px 20px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.filter-btn:hover, .filter-btn.active {
+    background-color: var(--primary);
+    color: var(--white);
+    border-color: var(--primary);
+    box-shadow: 0 4px 10px rgba(13, 110, 253, 0.2);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.4s ease-out forwards;
+}
+
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+
+/* Dashboard layout */
+.stat-box {
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.stat-box:hover {
+    transform: scale(1.05);
+}
