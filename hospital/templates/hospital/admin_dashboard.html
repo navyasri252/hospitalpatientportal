@@ -127,21 +127,20 @@
                             </td>
                             <!-- Medical Report Dialog button -->
                             <td class="text-center">
-                                {% if app.status == 'COMPLETED' or app.status == 'CONFIRMED' %}
-                                    <button type="button" class="btn btn-sm {% if app.medical_report %}btn-primary{% else %}btn-outline-primary{% endif %} rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#reportModal{{ app.id }}">
-                                        {% if app.medical_report %}
-                                            <i class="bi bi-file-earmark-medical-fill me-1"></i> Edit Report
-                                        {% else %}
-                                            <i class="bi bi-file-earmark-medical me-1"></i> Add Report
-                                        {% endif %}
-                                    </button>
-                                    
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="reportModal{{ app.id }}" tabindex="-1" aria-labelledby="reportModalLabel{{ app.id }}" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content border-0 shadow-lg rounded-4">
-                                                <form method="POST" action="{% url 'add_medical_report' app.id %}">
-                                                    {% csrf_token %}
+                                <button type="button" class="btn btn-sm {% if app.medical_report %}btn-primary{% else %}btn-outline-primary{% endif %} rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#reportModal{{ app.id }}">
+                                    {% if app.medical_report %}
+                                        <i class="bi bi-file-earmark-medical-fill me-1"></i> Edit Report
+                                    {% else %}
+                                        <i class="bi bi-file-earmark-medical me-1"></i> Add Report
+                                    {% endif %}
+                                </button>
+                                
+                                <!-- Modal -->
+                                <div class="modal fade" id="reportModal{{ app.id }}" tabindex="-1" aria-labelledby="reportModalLabel{{ app.id }}" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content border-0 shadow-lg rounded-4">
+                                            <form method="POST" action="{% url 'add_medical_report' app.id %}">
+                                                {% csrf_token %}
                                                     <div class="modal-header bg-primary-light border-0 py-3">
                                                         <h5 class="modal-title fw-bold text-primary" id="reportModalLabel{{ app.id }}">
                                                             <i class="bi bi-prescription2 me-2"></i>Consultation Diagnostics
@@ -174,12 +173,9 @@
                                                         <button type="submit" class="btn btn-premium rounded-pill px-4">Save Report</button>
                                                     </div>
                                                 </form>
-                                            </div>
-                                        </div>
                                     </div>
-                                {% else %}
-                                    <span class="text-muted small">Status must be confirmed/completed</span>
-                                {% endif %}
+                                </div>
+                            </td>
                             </td>
                         </tr>
                     {% endfor %}
